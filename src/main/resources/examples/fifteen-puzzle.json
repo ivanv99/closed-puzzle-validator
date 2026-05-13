@@ -1,0 +1,558 @@
+{
+  "id": "fifteen-puzzle",
+  "name": "15-Puzzle (4x4 sliding puzzle)",
+  "description": "Classic sliding puzzle. Fifteen numbered tiles must be re-ordered on a 4x4 board with one empty cell. A tile can be moved only into the empty neighbour cell.",
+  "PT": [
+    {
+      "id": "Cell",
+      "description": "Single tile slot, capacity 1."
+    }
+  ],
+  "P": [
+    {
+      "id": "C00",
+      "type": "Cell",
+      "x": 0,
+      "y": 0
+    },
+    {
+      "id": "C01",
+      "type": "Cell",
+      "x": 1,
+      "y": 0
+    },
+    {
+      "id": "C02",
+      "type": "Cell",
+      "x": 2,
+      "y": 0
+    },
+    {
+      "id": "C03",
+      "type": "Cell",
+      "x": 3,
+      "y": 0
+    },
+    {
+      "id": "C10",
+      "type": "Cell",
+      "x": 0,
+      "y": 1
+    },
+    {
+      "id": "C11",
+      "type": "Cell",
+      "x": 1,
+      "y": 1
+    },
+    {
+      "id": "C12",
+      "type": "Cell",
+      "x": 2,
+      "y": 1
+    },
+    {
+      "id": "C13",
+      "type": "Cell",
+      "x": 3,
+      "y": 1
+    },
+    {
+      "id": "C20",
+      "type": "Cell",
+      "x": 0,
+      "y": 2
+    },
+    {
+      "id": "C21",
+      "type": "Cell",
+      "x": 1,
+      "y": 2
+    },
+    {
+      "id": "C22",
+      "type": "Cell",
+      "x": 2,
+      "y": 2
+    },
+    {
+      "id": "C23",
+      "type": "Cell",
+      "x": 3,
+      "y": 2
+    },
+    {
+      "id": "C30",
+      "type": "Cell",
+      "x": 0,
+      "y": 3
+    },
+    {
+      "id": "C31",
+      "type": "Cell",
+      "x": 1,
+      "y": 3
+    },
+    {
+      "id": "C32",
+      "type": "Cell",
+      "x": 2,
+      "y": 3
+    },
+    {
+      "id": "C33",
+      "type": "Cell",
+      "x": 3,
+      "y": 3
+    }
+  ],
+  "OT": [
+    {
+      "id": "Tile",
+      "movable": true,
+      "clickable": true
+    }
+  ],
+  "O": [
+    {
+      "id": "T01",
+      "type": "Tile",
+      "title": "1"
+    },
+    {
+      "id": "T02",
+      "type": "Tile",
+      "title": "2"
+    },
+    {
+      "id": "T03",
+      "type": "Tile",
+      "title": "3"
+    },
+    {
+      "id": "T04",
+      "type": "Tile",
+      "title": "4"
+    },
+    {
+      "id": "T05",
+      "type": "Tile",
+      "title": "5"
+    },
+    {
+      "id": "T06",
+      "type": "Tile",
+      "title": "6"
+    },
+    {
+      "id": "T07",
+      "type": "Tile",
+      "title": "7"
+    },
+    {
+      "id": "T08",
+      "type": "Tile",
+      "title": "8"
+    },
+    {
+      "id": "T09",
+      "type": "Tile",
+      "title": "9"
+    },
+    {
+      "id": "T10",
+      "type": "Tile",
+      "title": "10"
+    },
+    {
+      "id": "T11",
+      "type": "Tile",
+      "title": "11"
+    },
+    {
+      "id": "T12",
+      "type": "Tile",
+      "title": "12"
+    },
+    {
+      "id": "T13",
+      "type": "Tile",
+      "title": "13"
+    },
+    {
+      "id": "T14",
+      "type": "Tile",
+      "title": "14"
+    },
+    {
+      "id": "T15",
+      "type": "Tile",
+      "title": "15"
+    }
+  ],
+  "InitDisp": [
+    {
+      "object": "T05",
+      "position": "C00"
+    },
+    {
+      "object": "T01",
+      "position": "C01"
+    },
+    {
+      "object": "T02",
+      "position": "C02"
+    },
+    {
+      "object": "T03",
+      "position": "C03"
+    },
+    {
+      "object": "T09",
+      "position": "C10"
+    },
+    {
+      "object": "T06",
+      "position": "C11"
+    },
+    {
+      "object": "T07",
+      "position": "C12"
+    },
+    {
+      "object": "T04",
+      "position": "C13"
+    },
+    {
+      "object": "T13",
+      "position": "C20"
+    },
+    {
+      "object": "T10",
+      "position": "C21"
+    },
+    {
+      "object": "T11",
+      "position": "C22"
+    },
+    {
+      "object": "T08",
+      "position": "C23"
+    },
+    {
+      "object": "T14",
+      "position": "C30"
+    },
+    {
+      "object": "T15",
+      "position": "C31"
+    },
+    {
+      "object": "T12",
+      "position": "C32"
+    }
+  ],
+  "A": [
+    {
+      "id": "Slide",
+      "kind": "move",
+      "origin": "player",
+      "params": {
+        "constraint": "neighbour-of-empty"
+      }
+    }
+  ],
+  "R": [
+    {
+      "id": "R-slide",
+      "action": "Slide",
+      "when": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "args": [
+              {
+                "op": "containsAny",
+                "args": [
+                  "$dst"
+                ]
+              },
+              0
+            ]
+          },
+          {
+            "op": "eq",
+            "args": [
+              {
+                "op": "manhattan",
+                "args": [
+                  "$src",
+                  "$dst"
+                ]
+              },
+              1
+            ]
+          }
+        ]
+      },
+      "fire": [
+        "E-take",
+        "E-place"
+      ]
+    }
+  ],
+  "E": [
+    {
+      "id": "E-take",
+      "effect": {
+        "op": "get",
+        "args": [
+          "$src",
+          "$obj"
+        ]
+      }
+    },
+    {
+      "id": "E-place",
+      "effect": {
+        "op": "put",
+        "args": [
+          "$dst",
+          "$obj"
+        ]
+      }
+    }
+  ],
+  "F": [
+    {
+      "id": "solved",
+      "expression": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "args": [
+              {
+                "op": "containsTyped",
+                "args": [
+                  "C00",
+                  "Tile"
+                ]
+              },
+              1
+            ]
+          },
+          {
+            "op": "eq",
+            "args": [
+              {
+                "op": "checkProperty",
+                "args": [
+                  "C00",
+                  "title"
+                ]
+              },
+              "1"
+            ]
+          },
+          {
+            "op": "eq",
+            "args": [
+              {
+                "op": "checkProperty",
+                "args": [
+                  "C01",
+                  "title"
+                ]
+              },
+              "2"
+            ]
+          },
+          {
+            "op": "eq",
+            "args": [
+              {
+                "op": "checkProperty",
+                "args": [
+                  "C02",
+                  "title"
+                ]
+              },
+              "3"
+            ]
+          },
+          {
+            "op": "eq",
+            "args": [
+              {
+                "op": "checkProperty",
+                "args": [
+                  "C03",
+                  "title"
+                ]
+              },
+              "4"
+            ]
+          },
+          {
+            "op": "eq",
+            "args": [
+              {
+                "op": "checkProperty",
+                "args": [
+                  "C10",
+                  "title"
+                ]
+              },
+              "5"
+            ]
+          },
+          {
+            "op": "eq",
+            "args": [
+              {
+                "op": "checkProperty",
+                "args": [
+                  "C11",
+                  "title"
+                ]
+              },
+              "6"
+            ]
+          },
+          {
+            "op": "eq",
+            "args": [
+              {
+                "op": "checkProperty",
+                "args": [
+                  "C12",
+                  "title"
+                ]
+              },
+              "7"
+            ]
+          },
+          {
+            "op": "eq",
+            "args": [
+              {
+                "op": "checkProperty",
+                "args": [
+                  "C13",
+                  "title"
+                ]
+              },
+              "8"
+            ]
+          },
+          {
+            "op": "eq",
+            "args": [
+              {
+                "op": "checkProperty",
+                "args": [
+                  "C20",
+                  "title"
+                ]
+              },
+              "9"
+            ]
+          },
+          {
+            "op": "eq",
+            "args": [
+              {
+                "op": "checkProperty",
+                "args": [
+                  "C21",
+                  "title"
+                ]
+              },
+              "10"
+            ]
+          },
+          {
+            "op": "eq",
+            "args": [
+              {
+                "op": "checkProperty",
+                "args": [
+                  "C22",
+                  "title"
+                ]
+              },
+              "11"
+            ]
+          },
+          {
+            "op": "eq",
+            "args": [
+              {
+                "op": "checkProperty",
+                "args": [
+                  "C23",
+                  "title"
+                ]
+              },
+              "12"
+            ]
+          },
+          {
+            "op": "eq",
+            "args": [
+              {
+                "op": "checkProperty",
+                "args": [
+                  "C30",
+                  "title"
+                ]
+              },
+              "13"
+            ]
+          },
+          {
+            "op": "eq",
+            "args": [
+              {
+                "op": "checkProperty",
+                "args": [
+                  "C31",
+                  "title"
+                ]
+              },
+              "14"
+            ]
+          },
+          {
+            "op": "eq",
+            "args": [
+              {
+                "op": "checkProperty",
+                "args": [
+                  "C32",
+                  "title"
+                ]
+              },
+              "15"
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "FC": {
+    "op": "var",
+    "args": [
+      "solved"
+    ]
+  },
+  "Res": {
+    "op": "var",
+    "args": [
+      "solved"
+    ]
+  }
+}
+

@@ -1,0 +1,385 @@
+{
+  "id": "memory-3x4",
+  "name": "Memory Game (3x4)",
+  "description": "Match 12 cards (six pairs of symbols) by clicking. The player wins when all cards are flipped open. Adapted from Bontchev & Vassileva (2010), Fig. 2.",
+  "PT": [
+    {
+      "id": "Card",
+      "description": "A card slot on the board. Capacity 1."
+    }
+  ],
+  "P": [
+    {
+      "id": "P11",
+      "type": "Card",
+      "x": 0,
+      "y": 0
+    },
+    {
+      "id": "P12",
+      "type": "Card",
+      "x": 1,
+      "y": 0
+    },
+    {
+      "id": "P13",
+      "type": "Card",
+      "x": 2,
+      "y": 0
+    },
+    {
+      "id": "P14",
+      "type": "Card",
+      "x": 3,
+      "y": 0
+    },
+    {
+      "id": "P21",
+      "type": "Card",
+      "x": 0,
+      "y": 1
+    },
+    {
+      "id": "P22",
+      "type": "Card",
+      "x": 1,
+      "y": 1
+    },
+    {
+      "id": "P23",
+      "type": "Card",
+      "x": 2,
+      "y": 1
+    },
+    {
+      "id": "P24",
+      "type": "Card",
+      "x": 3,
+      "y": 1
+    },
+    {
+      "id": "P31",
+      "type": "Card",
+      "x": 0,
+      "y": 2
+    },
+    {
+      "id": "P32",
+      "type": "Card",
+      "x": 1,
+      "y": 2
+    },
+    {
+      "id": "P33",
+      "type": "Card",
+      "x": 2,
+      "y": 2
+    },
+    {
+      "id": "P34",
+      "type": "Card",
+      "x": 3,
+      "y": 2
+    }
+  ],
+  "OT": [
+    {
+      "id": "Triangle",
+      "movable": false,
+      "clickable": true
+    },
+    {
+      "id": "Square",
+      "movable": false,
+      "clickable": true
+    },
+    {
+      "id": "Circle",
+      "movable": false,
+      "clickable": true
+    },
+    {
+      "id": "Heart",
+      "movable": false,
+      "clickable": true
+    },
+    {
+      "id": "Star",
+      "movable": false,
+      "clickable": true
+    },
+    {
+      "id": "Diamond",
+      "movable": false,
+      "clickable": true
+    }
+  ],
+  "O": [
+    {
+      "id": "O01",
+      "type": "Triangle",
+      "visible": false
+    },
+    {
+      "id": "O02",
+      "type": "Triangle",
+      "visible": false
+    },
+    {
+      "id": "O03",
+      "type": "Square",
+      "visible": false
+    },
+    {
+      "id": "O04",
+      "type": "Square",
+      "visible": false
+    },
+    {
+      "id": "O05",
+      "type": "Circle",
+      "visible": false
+    },
+    {
+      "id": "O06",
+      "type": "Circle",
+      "visible": false
+    },
+    {
+      "id": "O07",
+      "type": "Heart",
+      "visible": false
+    },
+    {
+      "id": "O08",
+      "type": "Heart",
+      "visible": false
+    },
+    {
+      "id": "O09",
+      "type": "Star",
+      "visible": false
+    },
+    {
+      "id": "O10",
+      "type": "Star",
+      "visible": false
+    },
+    {
+      "id": "O11",
+      "type": "Diamond",
+      "visible": false
+    },
+    {
+      "id": "O12",
+      "type": "Diamond",
+      "visible": false
+    }
+  ],
+  "InitDisp": [
+    {
+      "object": "O01",
+      "position": "P11"
+    },
+    {
+      "object": "O02",
+      "position": "P34"
+    },
+    {
+      "object": "O03",
+      "position": "P12"
+    },
+    {
+      "object": "O04",
+      "position": "P23"
+    },
+    {
+      "object": "O05",
+      "position": "P13"
+    },
+    {
+      "object": "O06",
+      "position": "P31"
+    },
+    {
+      "object": "O07",
+      "position": "P14"
+    },
+    {
+      "object": "O08",
+      "position": "P22"
+    },
+    {
+      "object": "O09",
+      "position": "P21"
+    },
+    {
+      "object": "O10",
+      "position": "P33"
+    },
+    {
+      "object": "O11",
+      "position": "P24"
+    },
+    {
+      "object": "O12",
+      "position": "P32"
+    }
+  ],
+  "A": [
+    {
+      "id": "ClickCard",
+      "kind": "click",
+      "origin": "player"
+    }
+  ],
+  "R": [
+    {
+      "id": "R-flip",
+      "action": "ClickCard",
+      "when": {
+        "op": "not",
+        "args": [
+          {
+            "op": "isVisible",
+            "args": [
+              "$target"
+            ]
+          }
+        ]
+      },
+      "fire": [
+        "E-flip",
+        "E-checkPair"
+      ]
+    }
+  ],
+  "E": [
+    {
+      "id": "E-flip",
+      "effect": {
+        "op": "setVisible",
+        "value": true
+      }
+    },
+    {
+      "id": "E-checkPair",
+      "effect": {
+        "op": "compose",
+        "steps": [
+          {
+            "op": "playSound",
+            "sound": "WellDone.wav",
+            "if": "matched"
+          },
+          {
+            "op": "setVisible",
+            "value": false,
+            "if": "notMatched",
+            "delayMs": 1500
+          },
+          {
+            "op": "incrementResult",
+            "by": 1,
+            "if": "matched"
+          }
+        ]
+      }
+    }
+  ],
+  "F": [
+    {
+      "id": "allRevealed",
+      "expression": {
+        "op": "and",
+        "args": [
+          {
+            "op": "isVisible",
+            "args": [
+              "O01"
+            ]
+          },
+          {
+            "op": "isVisible",
+            "args": [
+              "O02"
+            ]
+          },
+          {
+            "op": "isVisible",
+            "args": [
+              "O03"
+            ]
+          },
+          {
+            "op": "isVisible",
+            "args": [
+              "O04"
+            ]
+          },
+          {
+            "op": "isVisible",
+            "args": [
+              "O05"
+            ]
+          },
+          {
+            "op": "isVisible",
+            "args": [
+              "O06"
+            ]
+          },
+          {
+            "op": "isVisible",
+            "args": [
+              "O07"
+            ]
+          },
+          {
+            "op": "isVisible",
+            "args": [
+              "O08"
+            ]
+          },
+          {
+            "op": "isVisible",
+            "args": [
+              "O09"
+            ]
+          },
+          {
+            "op": "isVisible",
+            "args": [
+              "O10"
+            ]
+          },
+          {
+            "op": "isVisible",
+            "args": [
+              "O11"
+            ]
+          },
+          {
+            "op": "isVisible",
+            "args": [
+              "O12"
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "FC": {
+    "op": "var",
+    "args": [
+      "allRevealed"
+    ]
+  },
+  "Res": {
+    "op": "var",
+    "args": [
+      "result"
+    ]
+  }
+}
+

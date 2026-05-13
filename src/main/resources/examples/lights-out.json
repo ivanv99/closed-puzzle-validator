@@ -1,0 +1,347 @@
+{
+  "id": "lights-out-3x3",
+  "name": "Lights Out (3x3)",
+  "description": "Click a cell to toggle its light and the lights of its 4-neighbours. Goal: turn all lights off. A canonical 'action puzzle' that demonstrates events with multiple targets and side effects.",
+  "PT": [
+    {
+      "id": "Cell",
+      "description": "A light cell. Capacity 1 — exactly one Light object lives on it."
+    }
+  ],
+  "P": [
+    {
+      "id": "C00",
+      "type": "Cell",
+      "x": 0,
+      "y": 0
+    },
+    {
+      "id": "C01",
+      "type": "Cell",
+      "x": 1,
+      "y": 0
+    },
+    {
+      "id": "C02",
+      "type": "Cell",
+      "x": 2,
+      "y": 0
+    },
+    {
+      "id": "C10",
+      "type": "Cell",
+      "x": 0,
+      "y": 1
+    },
+    {
+      "id": "C11",
+      "type": "Cell",
+      "x": 1,
+      "y": 1
+    },
+    {
+      "id": "C12",
+      "type": "Cell",
+      "x": 2,
+      "y": 1
+    },
+    {
+      "id": "C20",
+      "type": "Cell",
+      "x": 0,
+      "y": 2
+    },
+    {
+      "id": "C21",
+      "type": "Cell",
+      "x": 1,
+      "y": 2
+    },
+    {
+      "id": "C22",
+      "type": "Cell",
+      "x": 2,
+      "y": 2
+    }
+  ],
+  "OT": [
+    {
+      "id": "Light",
+      "movable": false,
+      "clickable": true,
+      "description": "Object with a boolean 'on' state stored in 'focused' property."
+    }
+  ],
+  "O": [
+    {
+      "id": "L00",
+      "type": "Light",
+      "focused": true
+    },
+    {
+      "id": "L01",
+      "type": "Light",
+      "focused": false
+    },
+    {
+      "id": "L02",
+      "type": "Light",
+      "focused": true
+    },
+    {
+      "id": "L10",
+      "type": "Light",
+      "focused": false
+    },
+    {
+      "id": "L11",
+      "type": "Light",
+      "focused": true
+    },
+    {
+      "id": "L12",
+      "type": "Light",
+      "focused": false
+    },
+    {
+      "id": "L20",
+      "type": "Light",
+      "focused": true
+    },
+    {
+      "id": "L21",
+      "type": "Light",
+      "focused": false
+    },
+    {
+      "id": "L22",
+      "type": "Light",
+      "focused": true
+    }
+  ],
+  "InitDisp": [
+    {
+      "object": "L00",
+      "position": "C00"
+    },
+    {
+      "object": "L01",
+      "position": "C01"
+    },
+    {
+      "object": "L02",
+      "position": "C02"
+    },
+    {
+      "object": "L10",
+      "position": "C10"
+    },
+    {
+      "object": "L11",
+      "position": "C11"
+    },
+    {
+      "object": "L12",
+      "position": "C12"
+    },
+    {
+      "object": "L20",
+      "position": "C20"
+    },
+    {
+      "object": "L21",
+      "position": "C21"
+    },
+    {
+      "object": "L22",
+      "position": "C22"
+    }
+  ],
+  "A": [
+    {
+      "id": "Press",
+      "kind": "click",
+      "origin": "player"
+    }
+  ],
+  "R": [
+    {
+      "id": "R-press",
+      "action": "Press",
+      "fire": [
+        "E-toggleSelfAndNeighbours"
+      ]
+    }
+  ],
+  "E": [
+    {
+      "id": "E-toggleSelfAndNeighbours",
+      "effect": {
+        "op": "compose",
+        "steps": [
+          {
+            "op": "setProperty",
+            "target": "$target",
+            "property": "focused",
+            "value": "$not($target.focused)"
+          },
+          {
+            "op": "setProperty",
+            "target": "$neighbour(N)",
+            "property": "focused",
+            "value": "$not($neighbour(N).focused)"
+          },
+          {
+            "op": "setProperty",
+            "target": "$neighbour(S)",
+            "property": "focused",
+            "value": "$not($neighbour(S).focused)"
+          },
+          {
+            "op": "setProperty",
+            "target": "$neighbour(E)",
+            "property": "focused",
+            "value": "$not($neighbour(E).focused)"
+          },
+          {
+            "op": "setProperty",
+            "target": "$neighbour(W)",
+            "property": "focused",
+            "value": "$not($neighbour(W).focused)"
+          }
+        ]
+      }
+    }
+  ],
+  "F": [
+    {
+      "id": "allOff",
+      "expression": {
+        "op": "and",
+        "args": [
+          {
+            "op": "not",
+            "args": [
+              {
+                "op": "checkProperty",
+                "args": [
+                  "L00",
+                  "focused"
+                ]
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "args": [
+              {
+                "op": "checkProperty",
+                "args": [
+                  "L01",
+                  "focused"
+                ]
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "args": [
+              {
+                "op": "checkProperty",
+                "args": [
+                  "L02",
+                  "focused"
+                ]
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "args": [
+              {
+                "op": "checkProperty",
+                "args": [
+                  "L10",
+                  "focused"
+                ]
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "args": [
+              {
+                "op": "checkProperty",
+                "args": [
+                  "L11",
+                  "focused"
+                ]
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "args": [
+              {
+                "op": "checkProperty",
+                "args": [
+                  "L12",
+                  "focused"
+                ]
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "args": [
+              {
+                "op": "checkProperty",
+                "args": [
+                  "L20",
+                  "focused"
+                ]
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "args": [
+              {
+                "op": "checkProperty",
+                "args": [
+                  "L21",
+                  "focused"
+                ]
+              }
+            ]
+          },
+          {
+            "op": "not",
+            "args": [
+              {
+                "op": "checkProperty",
+                "args": [
+                  "L22",
+                  "focused"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "FC": {
+    "op": "var",
+    "args": [
+      "allOff"
+    ]
+  },
+  "Res": {
+    "op": "var",
+    "args": [
+      "allOff"
+    ]
+  }
+}
+

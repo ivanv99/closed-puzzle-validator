@@ -1,0 +1,283 @@
+{
+  "id": "matching-stars",
+  "name": "Concept Matching: Polygons & Stars",
+  "description": "Three star objects must be moved from service positions onto matching polygon positions (5-point→Pentagon, 6-point→Hexagon, 8-point→Octagon). Adapted from Bontchev & Vassileva (2010), Fig. 1.",
+  "PT": [
+    {
+      "id": "Pentagon"
+    },
+    {
+      "id": "Hexagon"
+    },
+    {
+      "id": "Octagon"
+    },
+    {
+      "id": "ServicePosition",
+      "description": "Holding slot for a star before it is dragged onto its target."
+    }
+  ],
+  "P": [
+    {
+      "id": "P1",
+      "type": "Pentagon",
+      "x": 0,
+      "y": 0
+    },
+    {
+      "id": "P2",
+      "type": "Hexagon",
+      "x": 1,
+      "y": 0
+    },
+    {
+      "id": "P3",
+      "type": "Octagon",
+      "x": 2,
+      "y": 0
+    },
+    {
+      "id": "P4",
+      "type": "ServicePosition",
+      "x": 0,
+      "y": 1,
+      "visible": false
+    },
+    {
+      "id": "P5",
+      "type": "ServicePosition",
+      "x": 1,
+      "y": 1,
+      "visible": false
+    },
+    {
+      "id": "P6",
+      "type": "ServicePosition",
+      "x": 2,
+      "y": 1,
+      "visible": false
+    }
+  ],
+  "OT": [
+    {
+      "id": "Star5",
+      "movable": true
+    },
+    {
+      "id": "Star6",
+      "movable": true
+    },
+    {
+      "id": "Star8",
+      "movable": true
+    }
+  ],
+  "O": [
+    {
+      "id": "O1",
+      "type": "Star5"
+    },
+    {
+      "id": "O2",
+      "type": "Star6"
+    },
+    {
+      "id": "O3",
+      "type": "Star8"
+    }
+  ],
+  "InitDisp": [
+    {
+      "object": "O1",
+      "position": "P4"
+    },
+    {
+      "object": "O2",
+      "position": "P5"
+    },
+    {
+      "object": "O3",
+      "position": "P6"
+    }
+  ],
+  "A": [
+    {
+      "id": "Move",
+      "kind": "move",
+      "origin": "player"
+    }
+  ],
+  "R": [
+    {
+      "id": "R-move",
+      "action": "Move",
+      "when": {
+        "op": "and",
+        "args": [
+          {
+            "op": "geq",
+            "args": [
+              {
+                "op": "containsAny",
+                "args": [
+                  "$src"
+                ]
+              },
+              1
+            ]
+          },
+          {
+            "op": "lt",
+            "args": [
+              {
+                "op": "containsAny",
+                "args": [
+                  "$dst"
+                ]
+              },
+              {
+                "op": "checkProperty",
+                "args": [
+                  "$dst",
+                  "capacity"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "fire": [
+        "E-take",
+        "E-place"
+      ]
+    }
+  ],
+  "E": [
+    {
+      "id": "E-take",
+      "effect": {
+        "op": "get",
+        "args": [
+          "$src",
+          "$obj"
+        ]
+      }
+    },
+    {
+      "id": "E-place",
+      "effect": {
+        "op": "put",
+        "args": [
+          "$dst",
+          "$obj"
+        ]
+      }
+    }
+  ],
+  "F": [
+    {
+      "id": "allServiceEmpty",
+      "expression": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "args": [
+              {
+                "op": "containsAny",
+                "args": [
+                  "P4"
+                ]
+              },
+              0
+            ]
+          },
+          {
+            "op": "eq",
+            "args": [
+              {
+                "op": "containsAny",
+                "args": [
+                  "P5"
+                ]
+              },
+              0
+            ]
+          },
+          {
+            "op": "eq",
+            "args": [
+              {
+                "op": "containsAny",
+                "args": [
+                  "P6"
+                ]
+              },
+              0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "correctMatching",
+      "expression": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "args": [
+              {
+                "op": "containsTyped",
+                "args": [
+                  "P1",
+                  "Star5"
+                ]
+              },
+              1
+            ]
+          },
+          {
+            "op": "eq",
+            "args": [
+              {
+                "op": "containsTyped",
+                "args": [
+                  "P2",
+                  "Star6"
+                ]
+              },
+              1
+            ]
+          },
+          {
+            "op": "eq",
+            "args": [
+              {
+                "op": "containsTyped",
+                "args": [
+                  "P3",
+                  "Star8"
+                ]
+              },
+              1
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "FC": {
+    "op": "var",
+    "args": [
+      "allServiceEmpty"
+    ]
+  },
+  "Res": {
+    "op": "var",
+    "args": [
+      "correctMatching"
+    ]
+  }
+}
+

@@ -1,0 +1,508 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/schemas/closed-puzzle.schema.json",
+  "title": "Close-Ended Puzzle Game",
+  "description": "Formal description of a close-ended puzzle video game. Extension of the model proposed by Bontchev & Vassileva (2010).",
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "PT",
+    "P",
+    "OT",
+    "O",
+    "InitDisp",
+    "A",
+    "R",
+    "FC"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string"
+    },
+    "CB": {
+      "description": "Contextual backgrounds. Optional.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Background"
+      },
+      "default": []
+    },
+    "PT": {
+      "description": "Position types.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/PositionType"
+      },
+      "uniqueItems": true
+    },
+    "P": {
+      "description": "Positions.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/Position"
+      }
+    },
+    "OT": {
+      "description": "Object types.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/ObjectType"
+      },
+      "uniqueItems": true
+    },
+    "O": {
+      "description": "Objects (entities).",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/ObjectInstance"
+      }
+    },
+    "InitDisp": {
+      "description": "Initial disposition: list of (object, position) placements with optional overrides. Replaces the 2D matrix from Bontchev (2010).",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Placement"
+      }
+    },
+    "A": {
+      "description": "Set of admissible actions.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/Action"
+      }
+    },
+    "R": {
+      "description": "Rules guarding action application.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Rule"
+      }
+    },
+    "E": {
+      "description": "Events fired before/during/after actions.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Event"
+      },
+      "default": []
+    },
+    "F": {
+      "description": "Auxiliary functions used by rules and final condition. Stored as named expressions.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Function"
+      },
+      "default": []
+    },
+    "FC": {
+      "description": "Final condition. Boolean expression over P, O and F. When true, the game is over.",
+      "$ref": "#/$defs/Expression"
+    },
+    "Res": {
+      "description": "Result expression evaluated when FC becomes true.",
+      "$ref": "#/$defs/Expression"
+    }
+  },
+  "$defs": {
+    "Background": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "image": {
+          "type": "string",
+          "description": "Path or URI to the image asset."
+        },
+        "visible": {
+          "type": "boolean",
+          "default": true
+        },
+        "opacity": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 1
+        }
+      }
+    },
+    "PositionType": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "defaultCapacity": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1
+        }
+      }
+    },
+    "Position": {
+      "type": "object",
+      "required": [
+        "id",
+        "type"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "description": "Reference to PositionType.id"
+        },
+        "title": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "visible": {
+          "type": "boolean",
+          "default": true
+        },
+        "focused": {
+          "type": "boolean",
+          "default": false
+        },
+        "capacity": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1
+        },
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        },
+        "z": {
+          "type": "number"
+        }
+      }
+    },
+    "ObjectType": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "movable": {
+          "type": "boolean",
+          "default": true
+        },
+        "rotatable": {
+          "type": "boolean",
+          "default": false
+        },
+        "clickable": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "ObjectInstance": {
+      "type": "object",
+      "required": [
+        "id",
+        "type"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "description": "Reference to ObjectType.id"
+        },
+        "title": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "visible": {
+          "type": "boolean",
+          "default": true
+        },
+        "focused": {
+          "type": "boolean",
+          "default": false
+        },
+        "rotation": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 360,
+          "default": 0
+        },
+        "zorder": {
+          "type": "integer",
+          "default": 0
+        },
+        "color": {
+          "type": "string"
+        },
+        "size": {
+          "type": "number"
+        }
+      }
+    },
+    "Placement": {
+      "type": "object",
+      "required": [
+        "object",
+        "position"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "object": {
+          "type": "string",
+          "description": "Reference to Object.id"
+        },
+        "position": {
+          "type": "string",
+          "description": "Reference to Position.id"
+        },
+        "overrides": {
+          "type": "object",
+          "description": "Optional initial property overrides for the object.",
+          "additionalProperties": true
+        }
+      }
+    },
+    "Action": {
+      "type": "object",
+      "required": [
+        "id",
+        "kind"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "click",
+            "doubleClick",
+            "move",
+            "rotate",
+            "flip",
+            "input",
+            "selectSequence",
+            "timeout",
+            "custom"
+          ]
+        },
+        "origin": {
+          "type": "string",
+          "enum": [
+            "player",
+            "environment",
+            "npc"
+          ],
+          "default": "player"
+        },
+        "params": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "Free-form parameters depending on action kind."
+        }
+      }
+    },
+    "Rule": {
+      "type": "object",
+      "required": [
+        "id",
+        "action"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "action": {
+          "type": "string",
+          "description": "Reference to Action.id"
+        },
+        "when": {
+          "$ref": "#/$defs/Expression",
+          "description": "Pre-condition."
+        },
+        "fire": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "References to Event.id"
+          },
+          "default": []
+        }
+      }
+    },
+    "Event": {
+      "type": "object",
+      "required": [
+        "id",
+        "effect"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "trigger": {
+          "$ref": "#/$defs/Expression",
+          "description": "Optional trigger condition. If absent, event is fired by referencing rules."
+        },
+        "target": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Object or position IDs affected by the effect."
+        },
+        "effect": {
+          "$ref": "#/$defs/Effect"
+        }
+      }
+    },
+    "Effect": {
+      "type": "object",
+      "required": [
+        "op"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "op": {
+          "type": "string",
+          "enum": [
+            "get",
+            "put",
+            "move",
+            "setProperty",
+            "incrementResult",
+            "decrementResult",
+            "setVisible",
+            "playSound",
+            "compose"
+          ]
+        }
+      }
+    },
+    "Function": {
+      "type": "object",
+      "required": [
+        "id",
+        "expression"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "expression": {
+          "$ref": "#/$defs/Expression"
+        }
+      }
+    },
+    "Expression": {
+      "description": "Boolean / arithmetic expression. AST form. See report Section 4.4 for the BNF.",
+      "oneOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "object",
+          "required": [
+            "op"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "op": {
+              "type": "string",
+              "enum": [
+                "and",
+                "or",
+                "not",
+                "eq",
+                "neq",
+                "lt",
+                "leq",
+                "gt",
+                "geq",
+                "add",
+                "sub",
+                "mul",
+                "div",
+                "mod",
+                "containsTyped",
+                "containsAny",
+                "checkProperty",
+                "checkType",
+                "checkLocation",
+                "isVisible",
+                "isEmpty",
+                "manhattan",
+                "neighbour",
+                "count",
+                "constant",
+                "var"
+              ]
+            },
+            "args": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Expression"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
+
