@@ -27,7 +27,7 @@ import java.util.Map;
  *       {@code movable} or {@code rotatable} reject the corresponding actions.</li>
  *   <li><b>Rules.</b> The guards ({@code when}) of all rules for the action are
  *       evaluated on the state <i>before</i> the action. If none holds, the
- *       action is rejected. Otherwise the {@code fire} lists of the applicable
+ *       action is rejected. Otherwise, the {@code fire} lists of the applicable
  *       rules are executed in declaration order.</li>
  *   <li><b>Triggered events.</b> Events with a {@code trigger} fire when their
  *       trigger changes from false to true (edge-triggered), checked after
