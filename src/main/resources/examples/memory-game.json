@@ -1,7 +1,7 @@
 {
   "id": "memory-3x4",
   "name": "Memory Game (3x4)",
-  "description": "Match 12 cards (six pairs of symbols) by clicking. The player wins when all cards are flipped open. Adapted from Bontchev & Vassileva (2010), Fig. 2.",
+  "description": "Match 12 cards (six pairs of symbols) by clicking. Up to two cards are open at a time (marked with the 'focused' property); a matching pair stays open, a non-matching pair is hidden again after 1.5 s. The player wins when all cards are revealed. Adapted from Bontchev & Vassileva (2010), Fig. 2.",
   "PT": [
     {
       "id": "Card",
@@ -238,19 +238,35 @@
       "id": "R-flip",
       "action": "ClickCard",
       "when": {
-        "op": "not",
+        "op": "and",
         "args": [
           {
-            "op": "isVisible",
+            "op": "not",
             "args": [
-              "$target"
+              {
+                "op": "isVisible",
+                "args": [
+                  "$target"
+                ]
+              }
+            ]
+          },
+          {
+            "op": "lt",
+            "args": [
+              {
+                "op": "var",
+                "args": [
+                  "openCount"
+                ]
+              },
+              2
             ]
           }
         ]
       },
       "fire": [
-        "E-flip",
-        "E-checkPair"
+        "E-flip"
       ]
     }
   ],
@@ -258,29 +274,88 @@
     {
       "id": "E-flip",
       "effect": {
-        "op": "setVisible",
-        "value": true
+        "op": "compose",
+        "steps": [
+          {
+            "op": "setVisible",
+            "value": true
+          },
+          {
+            "op": "setProperty",
+            "property": "focused",
+            "value": true
+          }
+        ]
       }
     },
     {
       "id": "E-checkPair",
+      "trigger": {
+        "op": "eq",
+        "args": [
+          {
+            "op": "var",
+            "args": [
+              "openCount"
+            ]
+          },
+          2
+        ]
+      },
+      "target": [
+        "O01",
+        "O02",
+        "O03",
+        "O04",
+        "O05",
+        "O06",
+        "O07",
+        "O08",
+        "O09",
+        "O10",
+        "O11",
+        "O12"
+      ],
       "effect": {
         "op": "compose",
         "steps": [
+          {
+            "op": "compose",
+            "if": "notMatched",
+            "delayMs": 1500,
+            "steps": [
+              {
+                "op": "setVisible",
+                "value": false,
+                "where": {
+                  "op": "checkProperty",
+                  "args": [
+                    "$it",
+                    "focused"
+                  ]
+                }
+              },
+              {
+                "op": "setProperty",
+                "property": "focused",
+                "value": false
+              }
+            ]
+          },
           {
             "op": "playSound",
             "sound": "WellDone.wav",
             "if": "matched"
           },
           {
-            "op": "setVisible",
-            "value": false,
-            "if": "notMatched",
-            "delayMs": 1500
-          },
-          {
             "op": "incrementResult",
             "by": 1,
+            "if": "matched"
+          },
+          {
+            "op": "setProperty",
+            "property": "focused",
+            "value": false,
             "if": "matched"
           }
         ]
@@ -288,6 +363,251 @@
     }
   ],
   "F": [
+    {
+      "id": "openCount",
+      "expression": {
+        "op": "count",
+        "args": [
+          {
+            "op": "checkProperty",
+            "args": [
+              "O01",
+              "focused"
+            ]
+          },
+          {
+            "op": "checkProperty",
+            "args": [
+              "O02",
+              "focused"
+            ]
+          },
+          {
+            "op": "checkProperty",
+            "args": [
+              "O03",
+              "focused"
+            ]
+          },
+          {
+            "op": "checkProperty",
+            "args": [
+              "O04",
+              "focused"
+            ]
+          },
+          {
+            "op": "checkProperty",
+            "args": [
+              "O05",
+              "focused"
+            ]
+          },
+          {
+            "op": "checkProperty",
+            "args": [
+              "O06",
+              "focused"
+            ]
+          },
+          {
+            "op": "checkProperty",
+            "args": [
+              "O07",
+              "focused"
+            ]
+          },
+          {
+            "op": "checkProperty",
+            "args": [
+              "O08",
+              "focused"
+            ]
+          },
+          {
+            "op": "checkProperty",
+            "args": [
+              "O09",
+              "focused"
+            ]
+          },
+          {
+            "op": "checkProperty",
+            "args": [
+              "O10",
+              "focused"
+            ]
+          },
+          {
+            "op": "checkProperty",
+            "args": [
+              "O11",
+              "focused"
+            ]
+          },
+          {
+            "op": "checkProperty",
+            "args": [
+              "O12",
+              "focused"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "matched",
+      "expression": {
+        "op": "or",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "checkProperty",
+                "args": [
+                  "O01",
+                  "focused"
+                ]
+              },
+              {
+                "op": "checkProperty",
+                "args": [
+                  "O02",
+                  "focused"
+                ]
+              }
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "checkProperty",
+                "args": [
+                  "O03",
+                  "focused"
+                ]
+              },
+              {
+                "op": "checkProperty",
+                "args": [
+                  "O04",
+                  "focused"
+                ]
+              }
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "checkProperty",
+                "args": [
+                  "O05",
+                  "focused"
+                ]
+              },
+              {
+                "op": "checkProperty",
+                "args": [
+                  "O06",
+                  "focused"
+                ]
+              }
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "checkProperty",
+                "args": [
+                  "O07",
+                  "focused"
+                ]
+              },
+              {
+                "op": "checkProperty",
+                "args": [
+                  "O08",
+                  "focused"
+                ]
+              }
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "checkProperty",
+                "args": [
+                  "O09",
+                  "focused"
+                ]
+              },
+              {
+                "op": "checkProperty",
+                "args": [
+                  "O10",
+                  "focused"
+                ]
+              }
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {
+                "op": "checkProperty",
+                "args": [
+                  "O11",
+                  "focused"
+                ]
+              },
+              {
+                "op": "checkProperty",
+                "args": [
+                  "O12",
+                  "focused"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "notMatched",
+      "expression": {
+        "op": "and",
+        "args": [
+          {
+            "op": "eq",
+            "args": [
+              {
+                "op": "var",
+                "args": [
+                  "openCount"
+                ]
+              },
+              2
+            ]
+          },
+          {
+            "op": "not",
+            "args": [
+              {
+                "op": "var",
+                "args": [
+                  "matched"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
     {
       "id": "allRevealed",
       "expression": {
@@ -382,4 +702,3 @@
     ]
   }
 }
-
