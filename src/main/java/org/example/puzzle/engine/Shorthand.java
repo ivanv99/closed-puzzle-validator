@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
  *   $neighbour(N)         → {"op":"neighbour","args":["$target","N"]}
  * </pre>
  */
-final class Shorthand {
+public final class Shorthand {
 
     private static final Pattern BINDING = Pattern.compile("\\$[A-Za-z_][A-Za-z0-9_]*");
     private static final JsonNodeFactory NODES = JsonNodeFactory.instance;
@@ -31,11 +31,11 @@ final class Shorthand {
     private Shorthand() {
     }
 
-    static boolean isBinding(String s) {
+    public static boolean isBinding(String s) {
         return BINDING.matcher(s).matches();
     }
 
-    static JsonNode parse(String source) {
+    public static JsonNode parse(String source) {
         Parser p = new Parser(source);
         JsonNode node = p.ref();
         p.skipSpaces();

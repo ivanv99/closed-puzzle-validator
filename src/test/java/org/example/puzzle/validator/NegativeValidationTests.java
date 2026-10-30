@@ -2,6 +2,8 @@ package org.example.puzzle.validator;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -98,6 +100,46 @@ class NegativeValidationTests {
         assertFalse(r.isValid());
         assertTrue(r.issues().stream().anyMatch(i -> i.code().equals("RAND-OBJ")));
         assertTrue(r.issues().stream().anyMatch(i -> i.code().equals("RAND-ACT")));
+    }
+
+    @Test
+    void detectsUndefinedFunctionReferences() throws Exception {
+        String undefined = BASE_OK.replace("\"FC\": true",
+                "\"FC\": {\"op\":\"var\",\"args\":[\"solved\"]}, \"Res\": {\"op\":\"var\",\"args\":[\"result\"]}");
+        ValidationReport r = new PuzzleValidator().validate(undefined);
+
+        assertFalse(r.isValid());
+        assertEquals(1, r.issues().stream().filter(i -> i.code().equals("VAR-UNDEF")).count(),
+                () -> "only 'solved' is undefined ('result' is built in): " + r.issues());
+    }
+
+    @Test
+    void detectsUndefinedConditionsAndMalformedReferencesInEffects() throws Exception {
+        String bad = BASE_OK
+                .replace("\"R\": [{\"id\":\"r\",\"action\":\"a\"}]", "\"R\": [{\"id\":\"r\",\"action\":\"a\",\"fire\":[\"e\"]}]")
+                .replace("\"FC\": true", "\"FC\": true, \"E\": [{\"id\":\"e\",\"effect\":{\"op\":\"setProperty\","
+                        + "\"property\":\"on\",\"value\":\"$not($target.on\",\"if\":\"matched\"}}]");
+        ValidationReport r = new PuzzleValidator().validate(bad);
+
+        assertTrue(r.issues().stream().anyMatch(i -> i.code().equals("VAR-UNDEF") && i.message().contains("matched")));
+        assertTrue(r.issues().stream().anyMatch(i -> i.code().equals("EXPR-REF")));
+    }
+
+    @Test
+    void detectsCyclicFunctions() throws Exception {
+        String cyclic = BASE_OK.replace("\"FC\": true", """
+                "F": [
+                  {"id":"a","expression":{"op":"var","args":["b"]}},
+                  {"id":"b","expression":{"op":"not","args":[{"op":"var","args":["a"]}]}},
+                  {"id":"c","expression":{"op":"var","args":["c"]}}
+                ],
+                "FC": {"op":"var","args":["a"]}""");
+        ValidationReport r = new PuzzleValidator().validate(cyclic);
+
+        List<String> cycles = r.issues().stream().filter(i -> i.code().equals("F-CYCLE")).map(i -> i.message()).toList();
+        assertEquals(2, cycles.size(), () -> "expected a → b → a and c → c: " + r.issues());
+        assertTrue(cycles.stream().anyMatch(m -> m.contains("a → b → a")));
+        assertTrue(cycles.stream().anyMatch(m -> m.contains("c → c")));
     }
 }
 
