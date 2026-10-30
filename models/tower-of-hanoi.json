@@ -1,0 +1,105 @@
+{
+  "id": "tower-of-hanoi",
+  "name": "Tower of Hanoi (4 disks)",
+  "description": "Move the stack of four disks from rod A to rod C. Only the top disk of a rod can be moved, and a disk may only be placed on the bottom of a rod or on a larger disk. Every rod is a column of cells, so the order of the disks is given by the cells.",
+  "PT": [{"id": "Cell", "description": "One level of a rod, capacity 1."}],
+  "P": [
+    {"id": "A4", "type": "Cell", "x": 0, "y": 0},
+    {"id": "A3", "type": "Cell", "x": 0, "y": 1},
+    {"id": "A2", "type": "Cell", "x": 0, "y": 2},
+    {"id": "A1", "type": "Cell", "x": 0, "y": 3},
+    {"id": "B4", "type": "Cell", "x": 2, "y": 0},
+    {"id": "B3", "type": "Cell", "x": 2, "y": 1},
+    {"id": "B2", "type": "Cell", "x": 2, "y": 2},
+    {"id": "B1", "type": "Cell", "x": 2, "y": 3},
+    {"id": "C4", "type": "Cell", "x": 4, "y": 0},
+    {"id": "C3", "type": "Cell", "x": 4, "y": 1},
+    {"id": "C2", "type": "Cell", "x": 4, "y": 2},
+    {"id": "C1", "type": "Cell", "x": 4, "y": 3}
+  ],
+  "OT": [
+    {
+      "id": "Disk",
+      "movable": true,
+      "clickable": false,
+      "description": "A disk; its size decides what it may be placed on."
+    }
+  ],
+  "O": [
+    {"id": "D1", "type": "Disk", "title": "1", "size": 0.55, "color": "#E0B04A"},
+    {"id": "D2", "type": "Disk", "title": "2", "size": 0.7, "color": "#D9734F"},
+    {"id": "D3", "type": "Disk", "title": "3", "size": 0.85, "color": "#5E9BC9"},
+    {"id": "D4", "type": "Disk", "title": "4", "size": 1.0, "color": "#6BB38A"}
+  ],
+  "InitDisp": [
+    {"object": "D4", "position": "A1"},
+    {"object": "D3", "position": "A2"},
+    {"object": "D2", "position": "A3"},
+    {"object": "D1", "position": "A4"}
+  ],
+  "A": [{"id": "Move", "kind": "move", "origin": "player"}],
+  "R": [
+    {
+      "id": "R-move",
+      "action": "Move",
+      "when": {
+        "op": "and",
+        "args": [
+          {"op": "isEmpty", "args": ["$dst"]},
+          {"op": "not", "args": [{"op": "neighbour", "args": ["$obj", "N"]}]},
+          {
+            "op": "or",
+            "args": [
+              {"op": "not", "args": [{"op": "neighbour", "args": ["$dst", "S"]}]},
+              {
+                "op": "and",
+                "args": [
+                  {
+                    "op": "not",
+                    "args": [{"op": "isEmpty", "args": [{"op": "neighbour", "args": ["$dst", "S"]}]}]
+                  },
+                  {
+                    "op": "gt",
+                    "args": [
+                      {
+                        "op": "checkProperty",
+                        "args": [{"op": "neighbour", "args": ["$dst", "S"]}, "size"]
+                      },
+                      {"op": "checkProperty", "args": ["$obj", "size"]}
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "fire": ["E-move"]
+    }
+  ],
+  "E": [
+    {
+      "id": "E-move",
+      "effect": {
+        "op": "compose",
+        "steps": [{"op": "move", "args": ["$obj", "$dst"]}, {"op": "incrementResult"}]
+      }
+    }
+  ],
+  "F": [
+    {
+      "id": "solved",
+      "expression": {
+        "op": "and",
+        "args": [
+          {"op": "not", "args": [{"op": "isEmpty", "args": ["C1"]}]},
+          {"op": "not", "args": [{"op": "isEmpty", "args": ["C2"]}]},
+          {"op": "not", "args": [{"op": "isEmpty", "args": ["C3"]}]},
+          {"op": "not", "args": [{"op": "isEmpty", "args": ["C4"]}]}
+        ]
+      }
+    }
+  ],
+  "FC": {"op": "var", "args": ["solved"]},
+  "Res": {"op": "var", "args": ["result"]}
+}

@@ -32,7 +32,11 @@ src/
       engine/CaseStudyPlayTests.java     — изиграва 4-те игри до край
       engine/EngineSemanticsTests.java   — семантика на изпълнението
       engine/RandomStartTests.java       — случайно начално състояние (RandInit)
+      engine/NewGamesPlayTests.java      — изиграва игрите от models/ (заредени от файл)
       server/EngineServerTests.java      — протоколът по HTTP
+models/                                  — игри извън вградените примери, само като модел
+  peg-solitaire.json
+  tower-of-hanoi.json
 unity/                                   — Unity 6 клиент (Assets/PuzzlePlayer)
 docs/
   internship-report.docx                 — отчет (≈20 стр.)
@@ -41,7 +45,7 @@ docs/
 ## Build и тестове
 
 ```powershell
-mvn test                  # 42 теста, всички трябва да минат
+mvn test                  # 49 теста, всички трябва да минат
 mvn package               # създава target/closed-puzzle-validator-1.0-SNAPSHOT.jar
 ```
 
@@ -122,6 +126,21 @@ java -jar target\closed-puzzle-validator-1.0-SNAPSHOT.jar serve --port 0 --paren
 
 Семантиката на изпълнение (оценка на правилата, събития с `trigger`, атомарност, отложени
 ефекти) е описана в Javadoc-а на `GameEngine`.
+
+## Нови игри само с модел (`models/`)
+
+Двете игри в `models/` са описани след като engine-ът и клиентът са готови, без промяна в кода.
+Не са вградени в jar-а: зареждат се от файл (в Unity — „Модел от файл“, по HTTP — `POST /games`
+с модела в тялото).
+
+* **Peg Solitaire** (английска дъска, 33 дупки): пулът прескача съседен пул в празна дупка, а
+  прескоченият се маха (`get`). По едно правило за всяка посока (N, S, E, W), с условие
+  `neighbour(neighbour($src, D), D) = $dst`. Играта свършва, когато няма възможен скок
+  (`FC = not canJump`); победа е, ако е останал един пул.
+* **Ханойски кули** (4 диска): всяка кула е колона от клетки, така че редът на дисковете е зададен
+  от позициите. Диск се мести, ако над него няма друг (`neighbour($obj, N)` е празно), и се слага на
+  дъното или върху по-голям диск — сравнява се `size`, който клиентът ползва и за мащаба.
+  `Res` е вграденият брояч `result` (брой ходове; оптималното решение е 15).
 
 ## Unity клиент (`unity/`)
 

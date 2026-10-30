@@ -1,0 +1,900 @@
+{
+  "id": "peg-solitaire",
+  "name": "Peg Solitaire (English board)",
+  "description": "33 holes in a cross, every hole but the centre holds a peg. A peg jumps orthogonally over a neighbouring peg into an empty hole and the jumped peg is removed. The game ends when no jump is possible; it is won when a single peg is left.",
+  "PT": [{"id": "Hole", "shape": "circle", "description": "Hole for one peg."}],
+  "P": [
+    {"id": "H02", "type": "Hole", "x": 2, "y": 0},
+    {"id": "H03", "type": "Hole", "x": 3, "y": 0},
+    {"id": "H04", "type": "Hole", "x": 4, "y": 0},
+    {"id": "H12", "type": "Hole", "x": 2, "y": 1},
+    {"id": "H13", "type": "Hole", "x": 3, "y": 1},
+    {"id": "H14", "type": "Hole", "x": 4, "y": 1},
+    {"id": "H20", "type": "Hole", "x": 0, "y": 2},
+    {"id": "H21", "type": "Hole", "x": 1, "y": 2},
+    {"id": "H22", "type": "Hole", "x": 2, "y": 2},
+    {"id": "H23", "type": "Hole", "x": 3, "y": 2},
+    {"id": "H24", "type": "Hole", "x": 4, "y": 2},
+    {"id": "H25", "type": "Hole", "x": 5, "y": 2},
+    {"id": "H26", "type": "Hole", "x": 6, "y": 2},
+    {"id": "H30", "type": "Hole", "x": 0, "y": 3},
+    {"id": "H31", "type": "Hole", "x": 1, "y": 3},
+    {"id": "H32", "type": "Hole", "x": 2, "y": 3},
+    {"id": "H33", "type": "Hole", "x": 3, "y": 3},
+    {"id": "H34", "type": "Hole", "x": 4, "y": 3},
+    {"id": "H35", "type": "Hole", "x": 5, "y": 3},
+    {"id": "H36", "type": "Hole", "x": 6, "y": 3},
+    {"id": "H40", "type": "Hole", "x": 0, "y": 4},
+    {"id": "H41", "type": "Hole", "x": 1, "y": 4},
+    {"id": "H42", "type": "Hole", "x": 2, "y": 4},
+    {"id": "H43", "type": "Hole", "x": 3, "y": 4},
+    {"id": "H44", "type": "Hole", "x": 4, "y": 4},
+    {"id": "H45", "type": "Hole", "x": 5, "y": 4},
+    {"id": "H46", "type": "Hole", "x": 6, "y": 4},
+    {"id": "H52", "type": "Hole", "x": 2, "y": 5},
+    {"id": "H53", "type": "Hole", "x": 3, "y": 5},
+    {"id": "H54", "type": "Hole", "x": 4, "y": 5},
+    {"id": "H62", "type": "Hole", "x": 2, "y": 6},
+    {"id": "H63", "type": "Hole", "x": 3, "y": 6},
+    {"id": "H64", "type": "Hole", "x": 4, "y": 6}
+  ],
+  "OT": [
+    {
+      "id": "Peg",
+      "shape": "circle",
+      "movable": true,
+      "clickable": false,
+      "description": "A peg; moved only by jumping."
+    }
+  ],
+  "O": [
+    {"id": "Peg01", "type": "Peg"},
+    {"id": "Peg02", "type": "Peg"},
+    {"id": "Peg03", "type": "Peg"},
+    {"id": "Peg04", "type": "Peg"},
+    {"id": "Peg05", "type": "Peg"},
+    {"id": "Peg06", "type": "Peg"},
+    {"id": "Peg07", "type": "Peg"},
+    {"id": "Peg08", "type": "Peg"},
+    {"id": "Peg09", "type": "Peg"},
+    {"id": "Peg10", "type": "Peg"},
+    {"id": "Peg11", "type": "Peg"},
+    {"id": "Peg12", "type": "Peg"},
+    {"id": "Peg13", "type": "Peg"},
+    {"id": "Peg14", "type": "Peg"},
+    {"id": "Peg15", "type": "Peg"},
+    {"id": "Peg16", "type": "Peg"},
+    {"id": "Peg17", "type": "Peg"},
+    {"id": "Peg18", "type": "Peg"},
+    {"id": "Peg19", "type": "Peg"},
+    {"id": "Peg20", "type": "Peg"},
+    {"id": "Peg21", "type": "Peg"},
+    {"id": "Peg22", "type": "Peg"},
+    {"id": "Peg23", "type": "Peg"},
+    {"id": "Peg24", "type": "Peg"},
+    {"id": "Peg25", "type": "Peg"},
+    {"id": "Peg26", "type": "Peg"},
+    {"id": "Peg27", "type": "Peg"},
+    {"id": "Peg28", "type": "Peg"},
+    {"id": "Peg29", "type": "Peg"},
+    {"id": "Peg30", "type": "Peg"},
+    {"id": "Peg31", "type": "Peg"},
+    {"id": "Peg32", "type": "Peg"}
+  ],
+  "InitDisp": [
+    {"object": "Peg01", "position": "H02"},
+    {"object": "Peg02", "position": "H03"},
+    {"object": "Peg03", "position": "H04"},
+    {"object": "Peg04", "position": "H12"},
+    {"object": "Peg05", "position": "H13"},
+    {"object": "Peg06", "position": "H14"},
+    {"object": "Peg07", "position": "H20"},
+    {"object": "Peg08", "position": "H21"},
+    {"object": "Peg09", "position": "H22"},
+    {"object": "Peg10", "position": "H23"},
+    {"object": "Peg11", "position": "H24"},
+    {"object": "Peg12", "position": "H25"},
+    {"object": "Peg13", "position": "H26"},
+    {"object": "Peg14", "position": "H30"},
+    {"object": "Peg15", "position": "H31"},
+    {"object": "Peg16", "position": "H32"},
+    {"object": "Peg17", "position": "H34"},
+    {"object": "Peg18", "position": "H35"},
+    {"object": "Peg19", "position": "H36"},
+    {"object": "Peg20", "position": "H40"},
+    {"object": "Peg21", "position": "H41"},
+    {"object": "Peg22", "position": "H42"},
+    {"object": "Peg23", "position": "H43"},
+    {"object": "Peg24", "position": "H44"},
+    {"object": "Peg25", "position": "H45"},
+    {"object": "Peg26", "position": "H46"},
+    {"object": "Peg27", "position": "H52"},
+    {"object": "Peg28", "position": "H53"},
+    {"object": "Peg29", "position": "H54"},
+    {"object": "Peg30", "position": "H62"},
+    {"object": "Peg31", "position": "H63"},
+    {"object": "Peg32", "position": "H64"}
+  ],
+  "A": [{"id": "Jump", "kind": "move", "origin": "player"}],
+  "R": [
+    {
+      "id": "R-jumpN",
+      "action": "Jump",
+      "when": {
+        "op": "and",
+        "args": [
+          {"op": "isEmpty", "args": ["$dst"]},
+          {
+            "op": "eq",
+            "args": [{"op": "neighbour", "args": [{"op": "neighbour", "args": ["$src", "N"]}, "N"]}, "$dst"]
+          },
+          {
+            "op": "not",
+            "args": [{"op": "isEmpty", "args": [{"op": "neighbour", "args": ["$src", "N"]}]}]
+          }
+        ]
+      },
+      "fire": ["E-jumpN"]
+    },
+    {
+      "id": "R-jumpS",
+      "action": "Jump",
+      "when": {
+        "op": "and",
+        "args": [
+          {"op": "isEmpty", "args": ["$dst"]},
+          {
+            "op": "eq",
+            "args": [{"op": "neighbour", "args": [{"op": "neighbour", "args": ["$src", "S"]}, "S"]}, "$dst"]
+          },
+          {
+            "op": "not",
+            "args": [{"op": "isEmpty", "args": [{"op": "neighbour", "args": ["$src", "S"]}]}]
+          }
+        ]
+      },
+      "fire": ["E-jumpS"]
+    },
+    {
+      "id": "R-jumpE",
+      "action": "Jump",
+      "when": {
+        "op": "and",
+        "args": [
+          {"op": "isEmpty", "args": ["$dst"]},
+          {
+            "op": "eq",
+            "args": [{"op": "neighbour", "args": [{"op": "neighbour", "args": ["$src", "E"]}, "E"]}, "$dst"]
+          },
+          {
+            "op": "not",
+            "args": [{"op": "isEmpty", "args": [{"op": "neighbour", "args": ["$src", "E"]}]}]
+          }
+        ]
+      },
+      "fire": ["E-jumpE"]
+    },
+    {
+      "id": "R-jumpW",
+      "action": "Jump",
+      "when": {
+        "op": "and",
+        "args": [
+          {"op": "isEmpty", "args": ["$dst"]},
+          {
+            "op": "eq",
+            "args": [{"op": "neighbour", "args": [{"op": "neighbour", "args": ["$src", "W"]}, "W"]}, "$dst"]
+          },
+          {
+            "op": "not",
+            "args": [{"op": "isEmpty", "args": [{"op": "neighbour", "args": ["$src", "W"]}]}]
+          }
+        ]
+      },
+      "fire": ["E-jumpW"]
+    }
+  ],
+  "E": [
+    {
+      "id": "E-jumpN",
+      "effect": {
+        "op": "compose",
+        "steps": [
+          {"op": "get", "args": ["$neighbour($src,N)", "$neighbour($obj,N)"]},
+          {"op": "move", "args": ["$obj", "$dst"]}
+        ]
+      }
+    },
+    {
+      "id": "E-jumpS",
+      "effect": {
+        "op": "compose",
+        "steps": [
+          {"op": "get", "args": ["$neighbour($src,S)", "$neighbour($obj,S)"]},
+          {"op": "move", "args": ["$obj", "$dst"]}
+        ]
+      }
+    },
+    {
+      "id": "E-jumpE",
+      "effect": {
+        "op": "compose",
+        "steps": [
+          {"op": "get", "args": ["$neighbour($src,E)", "$neighbour($obj,E)"]},
+          {"op": "move", "args": ["$obj", "$dst"]}
+        ]
+      }
+    },
+    {
+      "id": "E-jumpW",
+      "effect": {
+        "op": "compose",
+        "steps": [
+          {"op": "get", "args": ["$neighbour($src,W)", "$neighbour($obj,W)"]},
+          {"op": "move", "args": ["$obj", "$dst"]}
+        ]
+      }
+    }
+  ],
+  "F": [
+    {
+      "id": "pegsLeft",
+      "expression": {
+        "op": "count",
+        "args": [
+          {"op": "not", "args": [{"op": "isEmpty", "args": ["H02"]}]},
+          {"op": "not", "args": [{"op": "isEmpty", "args": ["H03"]}]},
+          {"op": "not", "args": [{"op": "isEmpty", "args": ["H04"]}]},
+          {"op": "not", "args": [{"op": "isEmpty", "args": ["H12"]}]},
+          {"op": "not", "args": [{"op": "isEmpty", "args": ["H13"]}]},
+          {"op": "not", "args": [{"op": "isEmpty", "args": ["H14"]}]},
+          {"op": "not", "args": [{"op": "isEmpty", "args": ["H20"]}]},
+          {"op": "not", "args": [{"op": "isEmpty", "args": ["H21"]}]},
+          {"op": "not", "args": [{"op": "isEmpty", "args": ["H22"]}]},
+          {"op": "not", "args": [{"op": "isEmpty", "args": ["H23"]}]},
+          {"op": "not", "args": [{"op": "isEmpty", "args": ["H24"]}]},
+          {"op": "not", "args": [{"op": "isEmpty", "args": ["H25"]}]},
+          {"op": "not", "args": [{"op": "isEmpty", "args": ["H26"]}]},
+          {"op": "not", "args": [{"op": "isEmpty", "args": ["H30"]}]},
+          {"op": "not", "args": [{"op": "isEmpty", "args": ["H31"]}]},
+          {"op": "not", "args": [{"op": "isEmpty", "args": ["H32"]}]},
+          {"op": "not", "args": [{"op": "isEmpty", "args": ["H33"]}]},
+          {"op": "not", "args": [{"op": "isEmpty", "args": ["H34"]}]},
+          {"op": "not", "args": [{"op": "isEmpty", "args": ["H35"]}]},
+          {"op": "not", "args": [{"op": "isEmpty", "args": ["H36"]}]},
+          {"op": "not", "args": [{"op": "isEmpty", "args": ["H40"]}]},
+          {"op": "not", "args": [{"op": "isEmpty", "args": ["H41"]}]},
+          {"op": "not", "args": [{"op": "isEmpty", "args": ["H42"]}]},
+          {"op": "not", "args": [{"op": "isEmpty", "args": ["H43"]}]},
+          {"op": "not", "args": [{"op": "isEmpty", "args": ["H44"]}]},
+          {"op": "not", "args": [{"op": "isEmpty", "args": ["H45"]}]},
+          {"op": "not", "args": [{"op": "isEmpty", "args": ["H46"]}]},
+          {"op": "not", "args": [{"op": "isEmpty", "args": ["H52"]}]},
+          {"op": "not", "args": [{"op": "isEmpty", "args": ["H53"]}]},
+          {"op": "not", "args": [{"op": "isEmpty", "args": ["H54"]}]},
+          {"op": "not", "args": [{"op": "isEmpty", "args": ["H62"]}]},
+          {"op": "not", "args": [{"op": "isEmpty", "args": ["H63"]}]},
+          {"op": "not", "args": [{"op": "isEmpty", "args": ["H64"]}]}
+        ]
+      }
+    },
+    {
+      "id": "canJump",
+      "expression": {
+        "op": "or",
+        "args": [
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H02"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H12"]}]},
+              {"op": "isEmpty", "args": ["H22"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H02"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H03"]}]},
+              {"op": "isEmpty", "args": ["H04"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H03"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H13"]}]},
+              {"op": "isEmpty", "args": ["H23"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H04"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H14"]}]},
+              {"op": "isEmpty", "args": ["H24"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H04"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H03"]}]},
+              {"op": "isEmpty", "args": ["H02"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H12"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H22"]}]},
+              {"op": "isEmpty", "args": ["H32"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H12"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H13"]}]},
+              {"op": "isEmpty", "args": ["H14"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H13"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H23"]}]},
+              {"op": "isEmpty", "args": ["H33"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H14"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H24"]}]},
+              {"op": "isEmpty", "args": ["H34"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H14"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H13"]}]},
+              {"op": "isEmpty", "args": ["H12"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H20"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H30"]}]},
+              {"op": "isEmpty", "args": ["H40"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H20"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H21"]}]},
+              {"op": "isEmpty", "args": ["H22"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H21"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H31"]}]},
+              {"op": "isEmpty", "args": ["H41"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H21"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H22"]}]},
+              {"op": "isEmpty", "args": ["H23"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H22"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H12"]}]},
+              {"op": "isEmpty", "args": ["H02"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H22"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H32"]}]},
+              {"op": "isEmpty", "args": ["H42"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H22"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H23"]}]},
+              {"op": "isEmpty", "args": ["H24"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H22"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H21"]}]},
+              {"op": "isEmpty", "args": ["H20"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H23"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H13"]}]},
+              {"op": "isEmpty", "args": ["H03"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H23"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H33"]}]},
+              {"op": "isEmpty", "args": ["H43"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H23"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H24"]}]},
+              {"op": "isEmpty", "args": ["H25"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H23"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H22"]}]},
+              {"op": "isEmpty", "args": ["H21"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H24"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H14"]}]},
+              {"op": "isEmpty", "args": ["H04"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H24"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H34"]}]},
+              {"op": "isEmpty", "args": ["H44"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H24"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H25"]}]},
+              {"op": "isEmpty", "args": ["H26"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H24"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H23"]}]},
+              {"op": "isEmpty", "args": ["H22"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H25"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H35"]}]},
+              {"op": "isEmpty", "args": ["H45"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H25"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H24"]}]},
+              {"op": "isEmpty", "args": ["H23"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H26"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H36"]}]},
+              {"op": "isEmpty", "args": ["H46"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H26"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H25"]}]},
+              {"op": "isEmpty", "args": ["H24"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H30"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H31"]}]},
+              {"op": "isEmpty", "args": ["H32"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H31"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H32"]}]},
+              {"op": "isEmpty", "args": ["H33"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H32"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H22"]}]},
+              {"op": "isEmpty", "args": ["H12"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H32"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H42"]}]},
+              {"op": "isEmpty", "args": ["H52"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H32"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H33"]}]},
+              {"op": "isEmpty", "args": ["H34"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H32"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H31"]}]},
+              {"op": "isEmpty", "args": ["H30"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H33"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H23"]}]},
+              {"op": "isEmpty", "args": ["H13"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H33"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H43"]}]},
+              {"op": "isEmpty", "args": ["H53"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H33"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H34"]}]},
+              {"op": "isEmpty", "args": ["H35"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H33"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H32"]}]},
+              {"op": "isEmpty", "args": ["H31"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H34"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H24"]}]},
+              {"op": "isEmpty", "args": ["H14"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H34"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H44"]}]},
+              {"op": "isEmpty", "args": ["H54"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H34"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H35"]}]},
+              {"op": "isEmpty", "args": ["H36"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H34"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H33"]}]},
+              {"op": "isEmpty", "args": ["H32"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H35"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H34"]}]},
+              {"op": "isEmpty", "args": ["H33"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H36"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H35"]}]},
+              {"op": "isEmpty", "args": ["H34"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H40"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H30"]}]},
+              {"op": "isEmpty", "args": ["H20"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H40"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H41"]}]},
+              {"op": "isEmpty", "args": ["H42"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H41"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H31"]}]},
+              {"op": "isEmpty", "args": ["H21"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H41"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H42"]}]},
+              {"op": "isEmpty", "args": ["H43"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H42"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H32"]}]},
+              {"op": "isEmpty", "args": ["H22"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H42"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H52"]}]},
+              {"op": "isEmpty", "args": ["H62"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H42"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H43"]}]},
+              {"op": "isEmpty", "args": ["H44"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H42"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H41"]}]},
+              {"op": "isEmpty", "args": ["H40"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H43"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H33"]}]},
+              {"op": "isEmpty", "args": ["H23"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H43"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H53"]}]},
+              {"op": "isEmpty", "args": ["H63"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H43"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H44"]}]},
+              {"op": "isEmpty", "args": ["H45"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H43"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H42"]}]},
+              {"op": "isEmpty", "args": ["H41"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H44"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H34"]}]},
+              {"op": "isEmpty", "args": ["H24"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H44"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H54"]}]},
+              {"op": "isEmpty", "args": ["H64"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H44"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H45"]}]},
+              {"op": "isEmpty", "args": ["H46"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H44"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H43"]}]},
+              {"op": "isEmpty", "args": ["H42"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H45"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H35"]}]},
+              {"op": "isEmpty", "args": ["H25"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H45"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H44"]}]},
+              {"op": "isEmpty", "args": ["H43"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H46"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H36"]}]},
+              {"op": "isEmpty", "args": ["H26"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H46"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H45"]}]},
+              {"op": "isEmpty", "args": ["H44"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H52"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H42"]}]},
+              {"op": "isEmpty", "args": ["H32"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H52"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H53"]}]},
+              {"op": "isEmpty", "args": ["H54"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H53"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H43"]}]},
+              {"op": "isEmpty", "args": ["H33"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H54"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H44"]}]},
+              {"op": "isEmpty", "args": ["H34"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H54"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H53"]}]},
+              {"op": "isEmpty", "args": ["H52"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H62"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H52"]}]},
+              {"op": "isEmpty", "args": ["H42"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H62"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H63"]}]},
+              {"op": "isEmpty", "args": ["H64"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H63"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H53"]}]},
+              {"op": "isEmpty", "args": ["H43"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H64"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H54"]}]},
+              {"op": "isEmpty", "args": ["H44"]}
+            ]
+          },
+          {
+            "op": "and",
+            "args": [
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H64"]}]},
+              {"op": "not", "args": [{"op": "isEmpty", "args": ["H63"]}]},
+              {"op": "isEmpty", "args": ["H62"]}
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "FC": {"op": "not", "args": [{"op": "var", "args": ["canJump"]}]},
+  "Res": {"op": "eq", "args": [{"op": "var", "args": ["pegsLeft"]}, 1]}
+}
