@@ -4,13 +4,16 @@
   "description": "Three star objects must be moved from service positions onto matching polygon positions (5-point→Pentagon, 6-point→Hexagon, 8-point→Octagon). Adapted from Bontchev & Vassileva (2010), Fig. 1.",
   "PT": [
     {
-      "id": "Pentagon"
+      "id": "Pentagon",
+      "shape": "polygon-5"
     },
     {
-      "id": "Hexagon"
+      "id": "Hexagon",
+      "shape": "polygon-6"
     },
     {
-      "id": "Octagon"
+      "id": "Octagon",
+      "shape": "polygon-8"
     },
     {
       "id": "ServicePosition",
@@ -61,14 +64,17 @@
   "OT": [
     {
       "id": "Star5",
+      "shape": "star-5",
       "movable": true
     },
     {
       "id": "Star6",
+      "shape": "star-6",
       "movable": true
     },
     {
       "id": "Star8",
+      "shape": "star-8",
       "movable": true
     }
   ],
@@ -280,4 +286,3 @@
     ]
   }
 }
-

@@ -85,31 +85,37 @@
   "OT": [
     {
       "id": "Triangle",
+      "shape": "triangle",
       "movable": false,
       "clickable": true
     },
     {
       "id": "Square",
+      "shape": "square",
       "movable": false,
       "clickable": true
     },
     {
       "id": "Circle",
+      "shape": "circle",
       "movable": false,
       "clickable": true
     },
     {
       "id": "Heart",
+      "shape": "heart",
       "movable": false,
       "clickable": true
     },
     {
       "id": "Star",
+      "shape": "star-5",
       "movable": false,
       "clickable": true
     },
     {
       "id": "Diamond",
+      "shape": "diamond",
       "movable": false,
       "clickable": true
     }

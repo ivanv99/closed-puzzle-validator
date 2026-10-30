@@ -67,6 +67,7 @@
   "OT": [
     {
       "id": "Light",
+      "shape": "circle",
       "movable": false,
       "clickable": true,
       "description": "Object with a boolean 'on' state stored in 'focused' property."
@@ -344,4 +345,3 @@
     ]
   }
 }
-

@@ -28,7 +28,7 @@ src/
   test/
     java/org/example/puzzle/
       validator/CaseStudyTests.java      — позитивни тестове за всички 4 игри
-      validator/NegativeValidationTests.java — 5 негативни сценария
+      validator/NegativeValidationTests.java — негативни сценарии
       engine/CaseStudyPlayTests.java     — изиграва 4-те игри до край
       engine/EngineSemanticsTests.java   — семантика на изпълнението
       server/EngineServerTests.java      — протоколът по HTTP
@@ -40,7 +40,7 @@ docs/
 ## Build и тестове
 
 ```powershell
-mvn test                  # 31 теста, всички трябва да минат
+mvn test                  # 32 теста, всички трябва да минат
 mvn package               # създава target/closed-puzzle-validator-1.0-SNAPSHOT.jar
 ```
 
@@ -108,6 +108,10 @@ P/O на модела, праща действията от A и показва 
 2. Unity Hub → *Add project from disk* → папка `unity/` (при първото отваряне се създава сцената
    `Assets/Scenes/PuzzlePlayer.unity`);
 3. *Play* → избор на игра от менюто или път до JSON модел.
+
+Формите идват от незадължителния атрибут `shape` на PT и OT (`circle`, `square`, `triangle`,
+`diamond`, `heart`, `polygon-N`, `star-N` за N от 3 до 12). Engine-ът го игнорира, а клиентът
+рисува формата вместо името на типа. Без `shape` обектът е заоблен квадрат с етикет.
 
 Клик върху обект изпраща click действията (`target`), а влачене или клик върху обект и после
 позиция изпраща move действията (`obj`, `dst`). За build: меню *Puzzle Player → Copy Engine Jar to

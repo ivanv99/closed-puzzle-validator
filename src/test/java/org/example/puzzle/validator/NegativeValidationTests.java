@@ -77,5 +77,16 @@ class NegativeValidationTests {
         assertFalse(r.isValid());
         assertTrue(r.issues().stream().anyMatch(i -> i.code().equals("ID-002")));
     }
+
+    @Test
+    void acceptsKnownShapesAndRejectsUnknownOnes() throws Exception {
+        String shaped = BASE_OK
+                .replace("\"PT\":[{\"id\":\"T\"}]", "\"PT\":[{\"id\":\"T\",\"shape\":\"polygon-6\"}]")
+                .replace("\"OT\":[{\"id\":\"X\"}]", "\"OT\":[{\"id\":\"X\",\"shape\":\"star-5\"}]");
+        assertTrue(new PuzzleValidator().validate(shaped).isValid());
+
+        ValidationReport r = new PuzzleValidator().validate(shaped.replace("star-5", "star-42"));
+        assertFalse(r.isValid());
+    }
 }
 

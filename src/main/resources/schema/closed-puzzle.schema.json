@@ -119,6 +119,11 @@
     }
   },
   "$defs": {
+    "Shape": {
+      "type": "string",
+      "description": "Optional presentation hint for clients: how positions/objects of this type are drawn. polygon-N and star-N take 3..12 corners/points.",
+      "pattern": "^(circle|square|triangle|diamond|heart|(polygon|star)-([3-9]|1[0-2]))$"
+    },
     "Background": {
       "type": "object",
       "required": [
@@ -157,6 +162,9 @@
         },
         "description": {
           "type": "string"
+        },
+        "shape": {
+          "$ref": "#/$defs/Shape"
         },
         "defaultCapacity": {
           "type": "integer",
@@ -222,6 +230,9 @@
         },
         "description": {
           "type": "string"
+        },
+        "shape": {
+          "$ref": "#/$defs/Shape"
         },
         "movable": {
           "type": "boolean",

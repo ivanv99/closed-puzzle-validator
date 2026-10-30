@@ -10,6 +10,7 @@ using UnityEngine;
 ///   <item>positions → slots at (x, −y); invisible positions get no slot but still hold objects;</item>
 ///   <item>objects → pieces coloured by type (or by their <c>color</c>), labelled with their
 ///         <c>title</c>, or with the type name when there is more than one type;</item>
+///   <item>a <c>shape</c> on PT/OT (see <see cref="Shapes"/>) replaces the rounded square and the type label;</item>
 ///   <item><c>visible: false</c> → face down (grey, no label); <c>focused: true</c> → highlighted;</item>
 ///   <item><c>rotation</c> and <c>size</c> are applied as transform rotation and scale.</item>
 /// </list>
@@ -37,6 +38,7 @@ public sealed class BoardView : MonoBehaviour
         public SpriteRenderer Body;
         public TextMesh Label;
         public string Type;
+        public Sprite Shape;
         public string Position;
         public Vector3 Target;
         public Vector3 Scale;
@@ -63,6 +65,7 @@ public sealed class BoardView : MonoBehaviour
         font ??= Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
 
         var positionTypes = (JArray)model["PT"];
+        Dictionary<string, Sprite> slotShapes = ShapesByType(positionTypes);
         var positions = (JArray)model["P"];
         int index = 0;
         foreach (JObject p in positions)
@@ -75,20 +78,26 @@ public sealed class BoardView : MonoBehaviour
             slots[id] = centre;
 
             if (!((bool?)state["positions"]?[id]?["visible"] ?? true)) continue;
-            SpriteRenderer slot = NewSprite("Slot " + id, centre, SlotSize, SlotColor, 0);
-            string caption = (string)p["title"] ?? (positionTypes.Count > 1 ? (string)p["type"] : null);
+            slotShapes.TryGetValue((string)p["type"] ?? "", out Sprite shape);
+            SpriteRenderer slot = NewSprite("Slot " + id, centre, SlotSize, SlotColor, 0, shape);
+            // a shape already tells the types apart
+            string caption = (string)p["title"] ??
+                             (shape == null && positionTypes.Count > 1 ? (string)p["type"] : null);
             if (caption != null)
                 NewLabel(slot.transform, caption, new Vector3(0, -0.62f, 0), 0.03f, new Color(0.75f, 0.77f, 0.8f), 1);
         }
 
         typeIndex = model["OT"].Select((t, i) => ((string)t["id"], i)).ToDictionary(t => t.Item1, t => t.i);
         labelByType = typeIndex.Count > 1;
+        Dictionary<string, Sprite> pieceShapes = ShapesByType((JArray)model["OT"]);
         foreach (JObject o in model["O"])
         {
             string id = (string)o["id"];
-            SpriteRenderer body = NewSprite("Object " + id, Vector3.zero, PieceSize, Color.white, 10);
+            string type = (string)o["type"];
+            pieceShapes.TryGetValue(type ?? "", out Sprite shape);
+            SpriteRenderer body = NewSprite("Object " + id, Vector3.zero, PieceSize, Color.white, 10, null);
             TextMesh label = NewLabel(body.transform, "", Vector3.zero, 0.05f, LabelColor, 11);
-            pieces[id] = new Piece { Go = body.gameObject, Body = body, Label = label, Type = (string)o["type"] };
+            pieces[id] = new Piece { Go = body.gameObject, Body = body, Label = label, Type = type, Shape = shape };
         }
 
         Bounds = slots.Values.Aggregate(new Bounds(slots.Values.First(), Vector3.zero), (b, c) =>
@@ -119,7 +128,10 @@ public sealed class BoardView : MonoBehaviour
             bool focused = (bool?)o["focused"] ?? false;
             Color baseColor = ColorUtility.TryParseHtmlString((string)o["color"] ?? "", out Color c) ? c : TypeColor(piece.Type);
             piece.Body.color = !visible ? HiddenColor : focused ? FocusColor : baseColor;
-            SetLabel(piece.Label, visible ? (string)o["title"] ?? (labelByType ? piece.Type : "") : "");
+            // face down keeps the plain card, otherwise the shape would give the type away
+            piece.Body.sprite = visible && piece.Shape != null ? piece.Shape : sprite;
+            string typeLabel = labelByType && piece.Shape == null ? piece.Type : "";
+            SetLabel(piece.Label, visible ? (string)o["title"] ?? typeLabel : "");
 
             piece.Scale = Vector3.one * PieceSize * ((float?)o["size"] ?? 1f);
             piece.Go.transform.rotation = Quaternion.Euler(0, 0, -((float?)o["rotation"] ?? 0f));
@@ -192,6 +204,10 @@ public sealed class BoardView : MonoBehaviour
         Bounds = default;
     }
 
+    private static Dictionary<string, Sprite> ShapesByType(JArray types) =>
+        types.Where(t => (string)t["shape"] != null)
+            .ToDictionary(t => (string)t["id"], t => Shapes.Get((string)t["shape"]));
+
     private Color TypeColor(string type) =>
         typeIndex.TryGetValue(type ?? "", out int i) ? Palette[i % Palette.Length] : Palette[0];
 
@@ -211,14 +227,14 @@ public sealed class BoardView : MonoBehaviour
         label.characterSize = 0.05f * Mathf.Min(1f, 3f / Mathf.Max(1, text.Length));
     }
 
-    private SpriteRenderer NewSprite(string name, Vector3 position, float size, Color color, int order)
+    private SpriteRenderer NewSprite(string name, Vector3 position, float size, Color color, int order, Sprite shape)
     {
         var go = new GameObject(name);
         go.transform.SetParent(transform, false);
         go.transform.position = position;
         go.transform.localScale = Vector3.one * size;
         var sr = go.AddComponent<SpriteRenderer>();
-        sr.sprite = sprite;
+        sr.sprite = shape != null ? shape : sprite;
         sr.color = color;
         sr.sortingOrder = order;
         spawned.Add(go);
