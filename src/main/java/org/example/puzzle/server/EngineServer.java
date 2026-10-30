@@ -28,6 +28,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Local HTTP/JSON front-end of the {@link GameEngine}, used by the Unity
@@ -39,6 +40,8 @@ import java.util.concurrent.Executors;
  *   POST   /validate                     body: model → validation report
  *   POST   /games                        body: model → new session (201)
  *   POST   /games?example=memory-game    new session from a bundled case study (201)
+ *          ...&seed=42 | &random=false   RandInit with this seed / InitDisp as written
+ *                                        (default: a fresh random seed, returned as "seed")
  *   GET    /games/{id}                   current state
  *   POST   /games/{id}/actions           body: {"action": "ClickCard", "params": {"target": "O01"}}
  *   POST   /games/{id}/time              body: {"ms": 1500} — advances the logical clock
@@ -206,7 +209,7 @@ public final class EngineServer {
         }
         GameEngine engine;
         try {
-            engine = new GameEngine(MAPPER.treeToValue(tree, ClosedPuzzle.class));
+            engine = new GameEngine(MAPPER.treeToValue(tree, ClosedPuzzle.class), seed(query));
         } catch (EngineException e) {
             return error(422, "The model cannot be executed: " + e.getMessage());
         }
@@ -214,6 +217,7 @@ public final class EngineServer {
         String id = UUID.randomUUID().toString();
         games.put(id, engine);
         Map<String, Object> view = view(id, engine);
+        view.put("seed", engine.seed());
         view.put("warnings", report.issues());
         view.put("model", tree);
         return new Response(201, view);
@@ -300,6 +304,17 @@ public final class EngineServer {
         try (InputStream in = EngineServer.class.getResourceAsStream("/examples/" + name + ".json")) {
             if (in == null) throw new HttpError(500, "Example '" + name + "' is missing from the build.");
             return MAPPER.readTree(in);
+        }
+    }
+
+    private static Long seed(String query) {
+        if ("false".equals(queryParam(query, "random"))) return null;
+        String seed = queryParam(query, "seed");
+        if (seed == null) return ThreadLocalRandom.current().nextLong(1_000_000_000L); // short enough to note down and replay
+        try {
+            return Long.parseLong(seed);
+        } catch (NumberFormatException e) {
+            throw new HttpError(400, "'seed' must be an integer.");
         }
     }
 

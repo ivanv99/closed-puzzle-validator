@@ -78,6 +78,45 @@
         "$ref": "#/$defs/Placement"
       }
     },
+    "RandInit": {
+      "description": "Extension of InitDisp (outside the original model tuple): optional randomisation of the initial disposition, applied when the game is started with a seed. shuffle: groups of objects whose positions are permuted; scramble: a number of random accepted player actions (keeps a solvable InitDisp solvable).",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "shuffle": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "minItems": 2,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "description": "Reference to Object.id"
+            }
+          }
+        },
+        "scramble": {
+          "type": "object",
+          "required": [
+            "steps"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "steps": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "actions": {
+              "type": "array",
+              "description": "References to Action.id; empty or missing means all actions.",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "A": {
       "description": "Set of admissible actions.",
       "type": "array",

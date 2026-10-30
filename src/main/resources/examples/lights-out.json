@@ -158,6 +158,12 @@
       "position": "C22"
     }
   ],
+  "RandInit": {
+    "scramble": {
+      "steps": 4,
+      "actions": ["Press"]
+    }
+  },
   "A": [
     {
       "id": "Press",

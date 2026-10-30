@@ -252,6 +252,12 @@
       "position": "C32"
     }
   ],
+  "RandInit": {
+    "scramble": {
+      "steps": 40,
+      "actions": ["Slide"]
+    }
+  },
   "A": [
     {
       "id": "Slide",

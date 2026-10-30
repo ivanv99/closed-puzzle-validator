@@ -5,6 +5,7 @@ import org.example.puzzle.model.*;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -70,6 +71,30 @@ public final class SemanticValidator {
                         "Position '" + pos.id + "' has capacity " + pos.capacity
                                 + " but InitDisp puts " + entry.getValue() + " object(s) on it.",
                         "/InitDisp");
+            }
+        }
+
+        // RandInit: shuffled objects must be placed, scramble actions must exist
+        if (puzzle.RandInit != null) {
+            Set<String> shuffled = new HashSet<>();
+            for (List<String> group : puzzle.RandInit.shuffle) {
+                for (String obj : group) {
+                    if (!placedObjects.contains(obj)) {
+                        r.error("RAND-OBJ", "RandInit shuffles '" + obj + "', which is not placed in InitDisp.",
+                                "/RandInit/shuffle");
+                    } else if (!shuffled.add(obj)) {
+                        r.warn("RAND-DUP", "Object '" + obj + "' is in more than one shuffle group.",
+                                "/RandInit/shuffle");
+                    }
+                }
+            }
+            if (puzzle.RandInit.scramble != null) {
+                for (String a : puzzle.RandInit.scramble.actions) {
+                    if (!aIx.containsKey(a)) {
+                        r.error("RAND-ACT", "RandInit scrambles with unknown action '" + a + "'.",
+                                "/RandInit/scramble");
+                    }
+                }
             }
         }
 

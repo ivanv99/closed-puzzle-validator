@@ -31,6 +31,7 @@ src/
       validator/NegativeValidationTests.java — негативни сценарии
       engine/CaseStudyPlayTests.java     — изиграва 4-те игри до край
       engine/EngineSemanticsTests.java   — семантика на изпълнението
+      engine/RandomStartTests.java       — случайно начално състояние (RandInit)
       server/EngineServerTests.java      — протоколът по HTTP
 unity/                                   — Unity 6 клиент (Assets/PuzzlePlayer)
 docs/
@@ -40,7 +41,7 @@ docs/
 ## Build и тестове
 
 ```powershell
-mvn test                  # 32 теста, всички трябва да минат
+mvn test                  # 39 теста, всички трябва да минат
 mvn package               # създава target/closed-puzzle-validator-1.0-SNAPSHOT.jar
 ```
 
@@ -85,6 +86,8 @@ java -jar target\closed-puzzle-validator-1.0-SNAPSHOT.jar serve --port 0 --paren
 | `POST /validate` | модел | доклад от валидатора |
 | `POST /games` | модел | 201: нова сесия (`sessionId`, `model`, `state`, `status`) |
 | `POST /games?example=memory-game` | — | 201: сесия от вградена игра |
+| `POST /games?...&seed=42` | — | 201: начално състояние от `RandInit` с този seed |
+| `POST /games?...&random=false` | — | 201: начално състояние точно по `InitDisp` |
 | `GET /games/{id}` | — | `state`, `status` |
 | `POST /games/{id}/actions` | `{"action":"ClickCard","params":{"target":"O01"}}` | `accepted`, `message`, `rules`, `events`, `sounds`, `status`, `state` |
 | `POST /games/{id}/time` | `{"ms":1500}` | като при действие; придвижва логическия часовник |
@@ -95,6 +98,27 @@ java -jar target\closed-puzzle-validator-1.0-SNAPSHOT.jar serve --port 0 --paren
 `status` съдържа `finished`, `result`, `clock` и `nextTimerInMs`: когато не е `null`, клиентът
 изчаква толкова и праща `/time`. Отхвърлен ход е 200 с `accepted:false`. HTTP грешките са 400
 (лоша заявка), 404 (непозната сесия/маршрут) и 422 (невалиден модел, с `issues`).
+
+По подразбиране всяка нова игра е със случаен seed, който се връща в отговора като `seed`
+(`null`, ако моделът няма `RandInit`), така че всяко начално състояние може да се възпроизведе.
+
+## Случайно начално състояние (`RandInit`)
+
+Разширение на `InitDisp` извън оригиналния кортеж на модела: незадължително описание как се рандомизира
+началната подредба:
+
+```json
+"RandInit": { "shuffle": [["O01", "O02", "O03"]] }
+"RandInit": { "scramble": { "steps": 40, "actions": ["Slide"] } }
+```
+
+* `shuffle` — групи от обекти, чиито позиции се пермутират (Memory, Matching Stars). Капацитетите
+  се запазват, защото множеството от позиции не се променя.
+* `scramble` — `steps` случайни **приети** действия на играча върху `InitDisp` (15-пъзел, Lights Out).
+  Всяка стъпка е легален ход, така че решима начална подредба остава решима. Разбъркването не е
+  част от играта: часовникът и резултатът се нулират, а стъпките, които биха завършили играта, не се броят.
+
+Без seed (`new GameEngine(model)` или `random=false`) играта започва точно по `InitDisp`.
 
 Семантиката на изпълнение (оценка на правилата, събития с `trigger`, атомарност, отложени
 ефекти) е описана в Javadoc-а на `GameEngine`.
@@ -122,7 +146,7 @@ StreamingAssets*. На машината трябва да има Java 21+ в `PA
 1. **Структурна** (`SchemaValidator`) — JSON Schema Draft 2020-12 проверка
    с `networknt/json-schema-validator`.
 2. **Семантична** (`SemanticValidator`):
-   - cross-references (P→PT, O→OT, R→A, R.fire→E, InitDisp→O,P);
+   - cross-references (P→PT, O→OT, R→A, R.fire→E, InitDisp→O,P, RandInit→O,A);
    - капацитет на позициите;
    - уникалност на идентификаторите;
    - наличие и форма на FC (decidable boolean expression);

@@ -28,6 +28,12 @@ public class ClosedPuzzle {
     public List<ObjectType> OT = new ArrayList<>();
     public List<ObjectInstance> O = new ArrayList<>();
     public List<Placement> InitDisp = new ArrayList<>();
+
+    /**
+     * Extension of InitDisp: optional randomisation (shuffle/scramble); see {@link RandInit}.
+     */
+    public RandInit RandInit;
+
     public List<Action> A = new ArrayList<>();
     public List<Rule> R = new ArrayList<>();
     public List<Event> E = new ArrayList<>();

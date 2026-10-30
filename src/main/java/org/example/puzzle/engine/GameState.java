@@ -8,9 +8,11 @@ import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Mutable run-time state of a puzzle: current properties of every object
@@ -218,6 +220,31 @@ public final class GameState {
 
     void addToCounter(double delta) {
         counter += delta;
+    }
+
+    void resetCounter() {
+        counter = 0;
+    }
+
+    /** Randomly permutes the positions of a group of placed objects. */
+    void shuffle(List<String> group, Random random) {
+        List<String> spots = new ArrayList<>();
+        for (String obj : group) {
+            String pos = location(obj);
+            if (pos == null) throw new EngineException("RandInit: object '" + obj + "' is not placed in InitDisp.");
+            spots.add(pos);
+        }
+        Collections.shuffle(spots, random);
+        for (int i = 0; i < group.size(); i++) location.put(group.get(i), spots.get(i));
+    }
+
+    /** Ids of all objects that are on the board, in declaration order. */
+    List<String> placedObjects() {
+        return objects.keySet().stream().filter(location::containsKey).toList();
+    }
+
+    List<String> positionIds() {
+        return positions.keySet().stream().filter(this::isPosition).toList();
     }
 
     /* ----- snapshot for clients ------------------------------------------ */

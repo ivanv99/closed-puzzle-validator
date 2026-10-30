@@ -4,16 +4,19 @@ import org.example.puzzle.model.Action;
 import org.example.puzzle.model.ClosedPuzzle;
 import org.example.puzzle.model.Event;
 import org.example.puzzle.model.ObjectType;
+import org.example.puzzle.model.RandInit;
 import org.example.puzzle.model.Rule;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.node.JsonNodeFactory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Executes a {@link ClosedPuzzle} model. Execution semantics:
@@ -38,6 +41,12 @@ import java.util.Map;
  *       step is rolled back.</li>
  *   <li><b>Time.</b> Effects with {@code delayMs} are queued on a logical
  *       clock that the client advances with {@link #advanceTime(long)}.</li>
+ *   <li><b>Random start.</b> When started with a seed, the {@code RandInit}
+ *       of the model is applied to InitDisp: first the {@code shuffle} groups,
+ *       then {@code scramble} random accepted actions (each followed by its
+ *       deferred effects). Afterwards the clock and the result counter are
+ *       reset, so the scramble is not part of the play. Scramble steps that
+ *       end the game do not count. The same seed gives the same start.</li>
  * </ol>
  */
 public final class GameEngine {
@@ -53,6 +62,7 @@ public final class GameEngine {
     private final Map<String, Action> actions = new LinkedHashMap<>();
     private final Map<String, Event> events = new LinkedHashMap<>();
     private final Map<String, ObjectType> objectTypes = new HashMap<>();
+    private final Long seed;
 
     private GameState state;
     private Map<String, Boolean> triggerMemory = new HashMap<>();
@@ -62,7 +72,16 @@ public final class GameEngine {
     private boolean finished;
     private Object result;
 
+    /** Starts the game from InitDisp exactly as written (no randomisation). */
     public GameEngine(ClosedPuzzle model) {
+        this(model, null);
+    }
+
+    /**
+     * Starts the game with {@code RandInit} applied using {@code seed};
+     * a {@code null} seed (or a model without RandInit) starts from InitDisp.
+     */
+    public GameEngine(ClosedPuzzle model, Long seed) {
         this.model = model;
         this.eval = new ExpressionEvaluator(model.F);
         this.effects = new EffectExecutor(eval);
@@ -71,9 +90,15 @@ public final class GameEngine {
         model.OT.forEach(t -> objectTypes.put(t.id, t));
 
         this.state = GameState.initial(model);
+        this.seed = model.RandInit == null ? null : seed;
+        Random random = this.seed == null ? null : new Random(this.seed);
+        if (random != null) {
+            for (List<String> group : model.RandInit.shuffle) state.shuffle(group, random);
+        }
         for (Event e : model.E) {
             if (e.trigger != null) triggerMemory.put(e.id, eval.test(e.trigger, state, Map.of()));
         }
+        if (random != null && model.RandInit.scramble != null) scramble(model.RandInit.scramble, random);
         checkFinal();
     }
 
@@ -85,6 +110,11 @@ public final class GameEngine {
 
     public ClosedPuzzle model() {
         return model;
+    }
+
+    /** The seed the initial state was randomised with, or {@code null} if it was not. */
+    public Long seed() {
+        return seed;
     }
 
     public GameState state() {
@@ -216,6 +246,56 @@ public final class GameEngine {
             result = model.Res == null || model.Res.isNull() ? null : eval.eval(model.Res, state, Map.of());
             timers.clear();
         }
+    }
+
+    /* ----- random start ------------------------------------------------- */
+
+    private void scramble(RandInit.Scramble s, Random random) {
+        List<String> pool = s.actions == null || s.actions.isEmpty() ? List.copyOf(actions.keySet()) : s.actions;
+        for (String id : pool) {
+            if (!actions.containsKey(id)) throw new EngineException("RandInit: unknown action '" + id + "'.");
+        }
+        int done = 0;
+        for (int attempt = 0; attempt < 4 * s.steps && done < s.steps; attempt++) {
+            if (!randomStep(pool, random)) break;
+            if (finished) {
+                finished = false;
+                result = null;
+            } else {
+                done++;
+            }
+        }
+        clock = 0;
+        timerSeq = 0;
+        state.resetCounter();
+    }
+
+    /** Performs one accepted action drawn uniformly from all candidate bindings; false if there is none. */
+    private boolean randomStep(List<String> pool, Random random) {
+        List<Map.Entry<String, Map<String, String>>> moves = new ArrayList<>();
+        for (String id : pool) {
+            if (actions.get(id).kind.equals("move")) {
+                for (String obj : state.placedObjects()) {
+                    for (String dst : state.positionIds()) moves.add(Map.entry(id, Map.of("obj", obj, "dst", dst)));
+                }
+            } else {
+                for (String obj : state.placedObjects()) moves.add(Map.entry(id, Map.of("target", obj)));
+                for (String pos : state.positionIds()) {
+                    if (state.objectsAt(pos).isEmpty()) moves.add(Map.entry(id, Map.of("target", pos)));
+                }
+            }
+        }
+        Collections.shuffle(moves, random);
+        for (Map.Entry<String, Map<String, String>> m : moves) {
+            if (!perform(m.getKey(), m.getValue()).accepted()) continue;
+            while (!timers.isEmpty()) {
+                if (!advanceTime(timers.getFirst().dueAt() - clock).accepted()) {
+                    throw new EngineException("RandInit: a deferred effect of '" + m.getKey() + "' failed.");
+                }
+            }
+            return true;
+        }
+        return false;
     }
 
     /* ----- binding & affordances ----------------------------------------- */

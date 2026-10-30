@@ -44,7 +44,7 @@ class EngineServerTests {
 
     @Test
     void memoryGameOverHttp() throws Exception {
-        Reply created = send("POST", "/games?example=memory-game", null);
+        Reply created = send("POST", "/games?example=memory-game&random=false", null);
         assertEquals(201, created.status);
         String id = created.json.path("sessionId").asString();
         assertEquals("memory-3x4", created.json.path("model").path("id").asString());
@@ -72,7 +72,7 @@ class EngineServerTests {
     @Test
     void gameFromPostedModelReachesTheEnd() throws Exception {
         String model = new String(getClass().getResourceAsStream("/examples/matching-stars.json").readAllBytes());
-        String id = send("POST", "/games", model).json.path("sessionId").asString();
+        String id = send("POST", "/games?random=false", model).json.path("sessionId").asString();
 
         send("POST", "/games/" + id + "/actions", "{\"action\":\"Move\",\"params\":{\"obj\":\"O1\",\"dst\":\"P1\"}}");
         send("POST", "/games/" + id + "/actions", "{\"action\":\"Move\",\"params\":{\"obj\":\"O2\",\"dst\":\"P2\"}}");
@@ -80,6 +80,20 @@ class EngineServerTests {
 
         assertTrue(last.json.path("status").path("finished").asBoolean());
         assertTrue(last.json.path("status").path("result").asBoolean());
+    }
+
+    @Test
+    void startIsRandomByDefaultAndReproducibleWithSeed() throws Exception {
+        Reply random = send("POST", "/games?example=fifteen-puzzle", null);
+        assertTrue(random.json.path("seed").canConvertToLong());
+
+        long seed = random.json.path("seed").asLong();
+        Reply replay = send("POST", "/games?example=fifteen-puzzle&seed=" + seed, null);
+        assertEquals(seed, replay.json.path("seed").asLong());
+        assertEquals(random.json.path("state"), replay.json.path("state"));
+
+        assertTrue(send("POST", "/games?example=fifteen-puzzle&random=false", null).json.path("seed").isNull());
+        assertEquals(400, send("POST", "/games?example=fifteen-puzzle&seed=abc", null).status);
     }
 
     @Test

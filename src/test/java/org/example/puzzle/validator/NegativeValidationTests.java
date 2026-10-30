@@ -88,5 +88,16 @@ class NegativeValidationTests {
         ValidationReport r = new PuzzleValidator().validate(shaped.replace("star-5", "star-42"));
         assertFalse(r.isValid());
     }
+
+    @Test
+    void detectsBadRandInitReferences() throws Exception {
+        String randomised = BASE_OK.replace("\"FC\": true",
+                "\"FC\": true, \"RandInit\": {\"shuffle\": [[\"O1\", \"O9\"]], \"scramble\": {\"steps\": 3, \"actions\": [\"zz\"]}}");
+        ValidationReport r = new PuzzleValidator().validate(randomised);
+
+        assertFalse(r.isValid());
+        assertTrue(r.issues().stream().anyMatch(i -> i.code().equals("RAND-OBJ")));
+        assertTrue(r.issues().stream().anyMatch(i -> i.code().equals("RAND-ACT")));
+    }
 }
 
